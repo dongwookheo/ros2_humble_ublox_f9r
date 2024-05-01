@@ -11,11 +11,13 @@ Instant install script for ROS2 on various versions of Ubuntu (20.04 LTS)Linux
 
 
 put the ublox_f9r folder from the repo in the src folder of workspace
-
-$ cd <ros_workspace>
-$ colcon build
-$ source install/setup.bash
-
+```
+cd <ros_workspace>
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+colcon build
+source install/setup.bash
+```
 
 # Open other terminal for ntrip client
 
