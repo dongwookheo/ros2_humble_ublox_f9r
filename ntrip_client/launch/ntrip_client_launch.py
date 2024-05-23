@@ -7,12 +7,12 @@ from launch_ros.actions import Node
 def generate_launch_description():
       return LaunchDescription([
             # Declare arguments with default values
-            DeclareLaunchArgument('host',         default_value='35.172.10.77'),
+            DeclareLaunchArgument('host',         default_value='gnss.eseoul.go.kr'), # gnss.eseoul.go.kr / RTS2.ngii.go.kr
             DeclareLaunchArgument('port',         default_value='2101'),
-            DeclareLaunchArgument('mountpoint',   default_value='AUL1'),
+            DeclareLaunchArgument('mountpoint',   default_value='YONS-RTCM32-M5'), # YONS-RTCM32-M5 / DBON, SONP, GUMC, GANS / VRS-RTCM32
             DeclareLaunchArgument('authenticate', default_value='True'),
-            DeclareLaunchArgument('username',     default_value='ntrip_dev'),
-            DeclareLaunchArgument('password',     default_value='EY7opuvk'),
+            DeclareLaunchArgument('username',     default_value='seoul'), # seoul / hdwook3918
+            DeclareLaunchArgument('password',     default_value='seoul'), # seoul / ngii
 
            # ****************************************************************** 
            # NTRIP Client Node
