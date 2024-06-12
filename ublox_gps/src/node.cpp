@@ -344,8 +344,8 @@ void UbloxNode::getRosParams() {
   uart_out_ = declareRosIntParameter<uint16_t>(this, "uart1.out", ublox_msgs::msg::CfgPRT::PROTO_UBX);
   // USB params
   set_usb_ = false;
-  this->declare_parameter<int32_t>("usb.in", rclcpp::PARAMETER_INTEGER);
-  this->declare_parameter<int32_t>("usb.out", rclcpp::PARAMETER_INTEGER);
+  this->declare_parameter<int32_t>("usb.in", 0);
+  this->declare_parameter<int32_t>("usb.out", 0);
   usb_tx_ = declareRosIntParameter<uint16_t>(this, "usb.tx_ready", 0);
   if (isRosParameterSet(this, "usb.in") || isRosParameterSet(this, "usb.out")) {
     set_usb_ = true;
@@ -365,8 +365,8 @@ void UbloxNode::getRosParams() {
   nav_rate_ = declareRosIntParameter<uint16_t>(this, "nav_rate", 1);  // # of measurement rate cycles
 
   // RTCM params
-  this->declare_parameter<std::vector<int32_t>>("rtcm.ids", std::vector<int32_t>{});
-  this->declare_parameter<std::vector<int32_t>>("rtcm.rates", std::vector<int32_t>{});
+  this->declare_parameter<std::vector<int32_t>>("rtcm.ids");
+  this->declare_parameter<std::vector<int32_t>>("rtcm.rates");
 
   this->get_parameter("rtcm.ids", rtcm_ids);
   this->get_parameter("rtcm.rates", rtcm_rates);
@@ -428,8 +428,8 @@ void UbloxNode::getRosParams() {
   this->declare_parameter<bool>("dat.set", false);
   this->declare_parameter<double>("dat.majA", 0.0);
   this->declare_parameter<double>("dat.flat", 0.0);
-  this->declare_parameter<std::vector<double>>("dat.shift", std::vector<double>{});
-  this->declare_parameter<std::vector<double>>("dat.rot", std::vector<double>{});
+  this->declare_parameter<std::vector<double>>("dat.shift");
+  this->declare_parameter<std::vector<double>>("dat.rot");
   this->declare_parameter<double>("dat.scale", 0.0);
   if (getRosBoolean(this, "dat.set")) {
     std::vector<double> shift, rot;
@@ -558,8 +558,8 @@ void UbloxNode::getRosParams() {
   this->declare_parameter<bool>("publish.hnr.pvt", true);
 
   this->declare_parameter<int32_t>("tmode3", 0);
-  this->declare_parameter<std::vector<double>>("arp.position", std::vector<double>{});
-  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", std::vector<int32_t>{});
+  this->declare_parameter<std::vector<double>>("arp.position");
+  this->declare_parameter<std::vector<int32_t>>("arp.position_hp");
   this->declare_parameter<double>("arp.acc", 0.0);
   this->declare_parameter<bool>("arp.lla_flag", false);
 
