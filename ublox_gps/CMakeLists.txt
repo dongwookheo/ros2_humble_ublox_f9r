@@ -13,8 +13,8 @@ endif()
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 find_package(ament_cmake_ros REQUIRED)
-# find_package(asio REQUIRED)
-find_package(Boost 1.85.0 HINTS /home/hdwook3918/thirdparty/boost/install/lib/cmake COMPONENTS system thread regex)
+find_package(asio REQUIRED)
+# find_package(Boost 1.85.0 HINTS /home/hdwook3918/thirdparty/boost/install/lib/cmake COMPONENTS system thread regex)
 find_package(diagnostic_msgs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -43,7 +43,7 @@ add_library(ublox_gps
   src/ublox_firmware8.cpp
   src/ublox_firmware9.cpp)
 ament_target_dependencies(ublox_gps
-  "Boost"
+  "asio"
   "diagnostic_msgs"
   "diagnostic_updater"
   "geometry_msgs"
