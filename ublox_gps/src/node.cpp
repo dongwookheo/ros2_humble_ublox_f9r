@@ -559,7 +559,7 @@ void UbloxNode::getRosParams() {
 
   this->declare_parameter<int32_t>("tmode3", 0);
   this->declare_parameter<std::vector<double>>("arp.position", std::vector<double>({0.0}));
-  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", std::vector<int32_t>({0.0}));
+  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", std::vector<int32_t>({0}));
   this->declare_parameter<double>("arp.acc", 0.0);
   this->declare_parameter<bool>("arp.lla_flag", false);
 
