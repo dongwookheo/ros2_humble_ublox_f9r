@@ -365,9 +365,9 @@ void UbloxNode::getRosParams() {
   nav_rate_ = declareRosIntParameter<uint16_t>(this, "nav_rate", 1);  // # of measurement rate cycles
 
   // RTCM params
-  this->declare_parameter<std::vector<int32_t>>("rtcm.ids", rclcpp::PARAMETER_INTEGER_ARRAY);
-  this->declare_parameter<std::vector<int32_t>>("rtcm.rates", rclcpp::PARAMETER_INTEGER_ARRAY);
- 
+  this->declare_parameter<std::vector<int32_t>>("rtcm.ids", std::vector<int32_t>());
+  this->declare_parameter<std::vector<int32_t>>("rtcm.rates", std::vector<int32_t>());
+
   this->get_parameter("rtcm.ids", rtcm_ids);
   this->get_parameter("rtcm.rates", rtcm_rates);
 
@@ -426,11 +426,11 @@ void UbloxNode::getRosParams() {
 
 
   this->declare_parameter<bool>("dat.set", false);
-  this->declare_parameter<double>("dat.majA", rclcpp::PARAMETER_DOUBLE);
-  this->declare_parameter<double>("dat.flat", rclcpp::PARAMETER_DOUBLE);
-  this->declare_parameter<std::vector<double>>("dat.shift", rclcpp::PARAMETER_DOUBLE_ARRAY);
-  this->declare_parameter<std::vector<double>>("dat.rot", rclcpp::PARAMETER_DOUBLE_ARRAY);
-  this->declare_parameter<double>("dat.scale", rclcpp::PARAMETER_DOUBLE);
+  this->declare_parameter<double>("dat.majA", 0.0);
+  this->declare_parameter<double>("dat.flat", 0.0);
+  this->declare_parameter<std::vector<double>>("dat.shift", std::vector<double>());
+  this->declare_parameter<std::vector<double>>("dat.rot", std::vector<double>());
+  this->declare_parameter<double>("dat.scale", 0.0);
   if (getRosBoolean(this, "dat.set")) {
     std::vector<double> shift, rot;
     if (!this->get_parameter("dat.majA", cfg_dat_.maj_a)
@@ -475,7 +475,7 @@ void UbloxNode::getRosParams() {
   this->declare_parameter<int32_t>("sv_in.min_dur", 0);
   this->declare_parameter<double>("sv_in.acc_lim", 0.0);
 
-  this->declare_parameter<int32_t>("dgnss_mode", rclcpp::PARAMETER_INTEGER);
+  this->declare_parameter<int32_t>("dgnss_mode", 0);
 
   // raw data stream logging
   this->declare_parameter<bool>("raw_data_stream.enable", false);
@@ -557,9 +557,9 @@ void UbloxNode::getRosParams() {
   // HNR parameters
   this->declare_parameter<bool>("publish.hnr.pvt", true);
 
-  this->declare_parameter<int32_t>("tmode3", rclcpp::PARAMETER_INTEGER);
-  this->declare_parameter<std::vector<double>>("arp.position", rclcpp::PARAMETER_DOUBLE_ARRAY);
-  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", rclcpp::PARAMETER_INTEGER_ARRAY);
+  this->declare_parameter<int32_t>("tmode3", 0);
+  this->declare_parameter<std::vector<double>>("arp.position", std::vector<double>());
+  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", std::vector<int32_t>());
   this->declare_parameter<double>("arp.acc", 0.0);
   this->declare_parameter<bool>("arp.lla_flag", false);
 
