@@ -365,8 +365,8 @@ void UbloxNode::getRosParams() {
   nav_rate_ = declareRosIntParameter<uint16_t>(this, "nav_rate", 1);  // # of measurement rate cycles
 
   // RTCM params
-  this->declare_parameter<std::vector<int32_t>>("rtcm.ids", std::vector<int32_t>{(1, 2, 3)});
-  this->declare_parameter<std::vector<int32_t>>("rtcm.rates", std::vector<int32_t>{(1, 2, 3)});
+  this->declare_parameter<std::vector<int32_t>>("rtcm.ids", std::vector<int32_t>{1, 2, 3});
+  this->declare_parameter<std::vector<int32_t>>("rtcm.rates", std::vector<int32_t>{1, 2, 3});
 
   this->get_parameter("rtcm.ids", rtcm_ids);
   this->get_parameter("rtcm.rates", rtcm_rates);
@@ -559,7 +559,7 @@ void UbloxNode::getRosParams() {
 
   this->declare_parameter<int32_t>("tmode3", 0);
   this->declare_parameter<std::vector<double>>("arp.position", std::vector<double>({0.0}));
-  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", std::vector<int32_t>({1, 2, 3}));
+  this->declare_parameter<std::vector<int32_t>>("arp.position_hp", std::vector<int32_t>{1, 2, 3});
   this->declare_parameter<double>("arp.acc", 0.0);
   this->declare_parameter<bool>("arp.lla_flag", false);
 
