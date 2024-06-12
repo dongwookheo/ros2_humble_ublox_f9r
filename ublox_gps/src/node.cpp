@@ -344,8 +344,8 @@ void UbloxNode::getRosParams() {
   uart_out_ = declareRosIntParameter<uint16_t>(this, "uart1.out", ublox_msgs::msg::CfgPRT::PROTO_UBX);
   // USB params
   set_usb_ = false;
-  this->declare_parameter<uint32_t>("usb.in", rclcpp::PARAMETER_INTEGER);
-  this->declare_parameter<uint32_t>("usb.out", rclcpp::PARAMETER_INTEGER);
+  this->declare_parameter<int32_t>("usb.in", rclcpp::PARAMETER_INTEGER);
+  this->declare_parameter<int32_t>("usb.out", rclcpp::PARAMETER_INTEGER);
   usb_tx_ = declareRosIntParameter<uint16_t>(this, "usb.tx_ready", 0);
   if (isRosParameterSet(this, "usb.in") || isRosParameterSet(this, "usb.out")) {
     set_usb_ = true;
