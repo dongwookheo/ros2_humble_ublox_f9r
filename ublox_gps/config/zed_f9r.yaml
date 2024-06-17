@@ -11,6 +11,8 @@ ublox_gps_node:
 
     device: /dev/ttyGPS
     frame_id: gps
+      uart1:
+        baudrate: 230400
     rate: 1.0                   # in Hz
     nav_rate: 1                 # [# of measurement cycles], recommended 1 Hz, may
                                 # be either 5 Hz (Dual constellation) or

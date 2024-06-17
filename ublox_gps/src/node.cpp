@@ -327,8 +327,8 @@ void UbloxNode::msgCallback(
 }
 
 void UbloxNode::getRosParams() {
-  device_ = this->declare_parameter<std::string>("device", std::string("/dev/ttyACM0"));
-  frame_id_ = this->declare_parameter<std::string>("frame_id", std::string("gps"));
+  device_ = this->declare_parameter("device", std::string("/dev/ttyACM0"));
+  frame_id_ = this->declare_parameter("frame_id", std::string("gps"));
 
   // Save configuration parameters
   load_.load_mask = declareRosIntParameter<uint32_t>(this, "load.mask", 0);
@@ -337,15 +337,15 @@ void UbloxNode::getRosParams() {
   save_.device_mask = declareRosIntParameter<uint8_t>(this, "save.device", 0);
 
   // UART 1 params
-  baudrate_ = declareRosIntParameter<uint32_t>(this, "uart1.baudrate", 9600);
+  baudrate_ = declareRosIntParameter<uint32_t>(this, "uart1.baudrate", 230400);
   uart_in_ = declareRosIntParameter<uint16_t>(this, "uart1.in", ublox_msgs::msg::CfgPRT::PROTO_UBX
                                               | ublox_msgs::msg::CfgPRT::PROTO_NMEA
                                               | ublox_msgs::msg::CfgPRT::PROTO_RTCM);
   uart_out_ = declareRosIntParameter<uint16_t>(this, "uart1.out", ublox_msgs::msg::CfgPRT::PROTO_UBX);
   // USB params
   set_usb_ = false;
-  this->declare_parameter<int32_t>("usb.in", 0);
-  this->declare_parameter<int32_t>("usb.out", 0);
+  this->declare_parameter("usb.in");
+  this->declare_parameter("usb.out");
   usb_tx_ = declareRosIntParameter<uint16_t>(this, "usb.tx_ready", 0);
   if (isRosParameterSet(this, "usb.in") || isRosParameterSet(this, "usb.out")) {
     set_usb_ = true;
@@ -359,20 +359,20 @@ void UbloxNode::getRosParams() {
     }
   }
   // Measurement rate params
-  rate_ = this->declare_parameter<double>("rate", 4.0);  // in Hz
+  rate_ = this->declare_parameter("rate", 4.0);  // in Hz
   checkMin(rate_, 0.0, "rate");
 
   nav_rate_ = declareRosIntParameter<uint16_t>(this, "nav_rate", 1);  // # of measurement rate cycles
 
   // RTCM params
-  this->declare_parameter<std::vector<int64_t>>("rtcm.ids", std::vector<int64_t>{});
-  this->declare_parameter<std::vector<int64_t>>("rtcm.rates", std::vector<int64_t>{});
-
+  this->declare_parameter("rtcm.ids");
+  this->declare_parameter("rtcm.rates");
+ 
   this->get_parameter("rtcm.ids", rtcm_ids);
   this->get_parameter("rtcm.rates", rtcm_rates);
 
 
-  this->declare_parameter<bool>("sensor_fusion",false);
+  this->declare_parameter("sensor_fusion",false);
 
   // this->get_parameter("sensor_fusion", enable_sensor_fusion);
 
@@ -387,7 +387,7 @@ void UbloxNode::getRosParams() {
     RCLCPP_WARN(this->get_logger(), "getRosBoolean sensor_fusion false");
   }
 
-  this->declare_parameter<bool>("imu_offset",false);
+  this->declare_parameter("imu_offset",false);
 
   // this->get_parameter("imu_offset", enable_sensor_fusion);
 
@@ -403,34 +403,34 @@ void UbloxNode::getRosParams() {
 
 
   // PPP: Advanced Setting
-  this->declare_parameter<bool>("enable_ppp", false);
+  this->declare_parameter("enable_ppp", false);
   if (getRosBoolean(this, "enable_ppp")) {
     RCLCPP_WARN(this->get_logger(), "Warning: PPP is enabled - this is an expert setting.");
   }
 
   // SBAS params, only for some devices
-  this->declare_parameter<bool>("gnss.sbas", false);
-  this->declare_parameter<bool>("gnss.gps", true);
-  this->declare_parameter<bool>("gnss.glonass", false);
-  this->declare_parameter<bool>("gnss.qzss", false);
-  this->declare_parameter<bool>("gnss.galileo", false);
-  this->declare_parameter<bool>("gnss.beidou", false);
-  this->declare_parameter<bool>("gnss.imes", false);
+  this->declare_parameter("gnss.sbas", false);
+  this->declare_parameter("gnss.gps", true);
+  this->declare_parameter("gnss.glonass", false);
+  this->declare_parameter("gnss.qzss", false);
+  this->declare_parameter("gnss.galileo", false);
+  this->declare_parameter("gnss.beidou", false);
+  this->declare_parameter("gnss.imes", false);
   max_sbas_ = declareRosIntParameter<uint8_t>(this, "sbas.max", 0); // Maximum number of SBAS channels
   sbas_usage_ = declareRosIntParameter<uint8_t>(this, "sbas.usage", 0);
-  dynamic_model_ = this->declare_parameter<std::string>("dynamic_model", std::string("portable"));
+  dynamic_model_ = this->declare_parameter("dynamic_model", std::string("portable"));
   dmodel_ = modelFromString(dynamic_model_);
-  fix_mode_ = this->declare_parameter<std::string>("fix_mode", std::string("auto"));
+  fix_mode_ = this->declare_parameter("fix_mode", std::string("auto"));
   fmode_ = fixModeFromString(fix_mode_);
   dr_limit_ = declareRosIntParameter<uint8_t>(this, "dr_limit", 0); // Dead reckoning limit
 
 
-  this->declare_parameter<bool>("dat.set", false);
-  this->declare_parameter<double>("dat.majA", 0.0);
-  this->declare_parameter<double>("dat.flat", 0.0);
-  this->declare_parameter<std::vector<double>>("dat.shift", std::vector<double>{});
-  this->declare_parameter<std::vector<double>>("dat.rot", std::vector<double>{});
-  this->declare_parameter<double>("dat.scale", 0.0);
+  this->declare_parameter("dat.set", false);
+  this->declare_parameter("dat.majA");
+  this->declare_parameter("dat.flat");
+  this->declare_parameter("dat.shift");
+  this->declare_parameter("dat.rot");
+  this->declare_parameter("dat.scale");
   if (getRosBoolean(this, "dat.set")) {
     std::vector<double> shift, rot;
     if (!this->get_parameter("dat.majA", cfg_dat_.maj_a)
@@ -465,20 +465,20 @@ void UbloxNode::getRosParams() {
   meas_rate_ = 1000 / rate_;
 
   // activate/deactivate any config
-  this->declare_parameter<bool>("config_on_startup", true);
-  this->declare_parameter<bool>("raw_data", false);
-  this->declare_parameter<bool>("clear_bbr", false);
-  this->declare_parameter<bool>("save_on_shutdown", false);
-  this->declare_parameter<bool>("use_adr", true);
+  this->declare_parameter("config_on_startup", true);
+  this->declare_parameter("raw_data", false);
+  this->declare_parameter("clear_bbr", false);
+  this->declare_parameter("save_on_shutdown", false);
+  this->declare_parameter("use_adr", true);
 
-  this->declare_parameter<bool>("sv_in.reset", true);
-  this->declare_parameter<int32_t>("sv_in.min_dur", 0);
-  this->declare_parameter<double>("sv_in.acc_lim", 0.0);
+  this->declare_parameter("sv_in.reset", true);
+  this->declare_parameter("sv_in.min_dur", 0);
+  this->declare_parameter("sv_in.acc_lim", 0.0);
 
-  this->declare_parameter<int32_t>("dgnss_mode", 0);
+  this->declare_parameter("dgnss_mode");
 
   // raw data stream logging
-  this->declare_parameter<bool>("raw_data_stream.enable", false);
+  this->declare_parameter("raw_data_stream.enable", false);
   if (getRosBoolean(this, "raw_data_stream.enable")) {
     raw_data_stream_pa_ = std::make_shared<ublox_node::RawDataStreamPa>(
       getRosBoolean(this, "raw_data_stream.enable"));
@@ -486,84 +486,84 @@ void UbloxNode::getRosParams() {
   }
 
   // NMEA parameters
-  this->declare_parameter<bool>("nmea.set", false);
-  this->declare_parameter<bool>("nmea.compat", false);
-  this->declare_parameter<bool>("nmea.consider", false);
-  this->declare_parameter<bool>("nmea.limit82", false);
-  this->declare_parameter<bool>("nmea.high_prec", true);
-  this->declare_parameter<bool>("nmea.filter.pos", false);
-  this->declare_parameter<bool>("nmea.filter.msk_pos", false);
-  this->declare_parameter<bool>("nmea.filter.time", false);
-  this->declare_parameter<bool>("nmea.filter.date", false);
-  this->declare_parameter<bool>("nmea.filter.sbas", false);
-  this->declare_parameter<bool>("nmea.filter.track", false);
-  this->declare_parameter<bool>("nmea.filter.gps_only", false);
-  this->declare_parameter<bool>("nmea.gnssToFilter.gps", false);
-  this->declare_parameter<bool>("nmea.gnssToFilter.sbas", false);
-  this->declare_parameter<bool>("nmea.gnssToFilter.qzss", false);
-  this->declare_parameter<bool>("nmea.gnssToFilter.glonass", false);
-  this->declare_parameter<bool>("nmea.gnssToFilter.beidou", false);
+  this->declare_parameter("nmea.set", false);
+  this->declare_parameter("nmea.compat", false);
+  this->declare_parameter("nmea.consider", false);
+  this->declare_parameter("nmea.limit82", false);
+  this->declare_parameter("nmea.high_prec", false);
+  this->declare_parameter("nmea.filter.pos", false);
+  this->declare_parameter("nmea.filter.msk_pos", false);
+  this->declare_parameter("nmea.filter.time", false);
+  this->declare_parameter("nmea.filter.date", false);
+  this->declare_parameter("nmea.filter.sbas", false);
+  this->declare_parameter("nmea.filter.track", false);
+  this->declare_parameter("nmea.filter.gps_only", false);
+  this->declare_parameter("nmea.gnssToFilter.gps", false);
+  this->declare_parameter("nmea.gnssToFilter.sbas", false);
+  this->declare_parameter("nmea.gnssToFilter.qzss", false);
+  this->declare_parameter("nmea.gnssToFilter.glonass", false);
+  this->declare_parameter("nmea.gnssToFilter.beidou", false);
 
   // Publish parameters
-  this->declare_parameter<bool>("publish.all", false);
+  this->declare_parameter("publish.all", false);
 
-  this->declare_parameter<bool>("publish.nav.all", getRosBoolean(this, "publish.all"));
-  this->declare_parameter<bool>("publish.nav.att", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.clock", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.heading", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.posecef", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.posllh", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.pvt", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.relposned", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.sat", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.sol", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.svin", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.svinfo", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.status", getRosBoolean(this, "publish.nav.all"));
-  this->declare_parameter<bool>("publish.nav.velned", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.all", getRosBoolean(this, "publish.all"));
+  this->declare_parameter("publish.nav.att", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.clock", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.heading", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.posecef", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.posllh", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.pvt", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.relposned", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.sat", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.sol", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.svin", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.svinfo", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.status", getRosBoolean(this, "publish.nav.all"));
+  this->declare_parameter("publish.nav.velned", getRosBoolean(this, "publish.nav.all"));
 
-  this->declare_parameter<bool>("publish.rxm.all", getRosBoolean(this, "publish.all"));
-  this->declare_parameter<bool>("publish.rxm.almRaw", getRosBoolean(this, "publish.rxm.all"));
-  this->declare_parameter<bool>("publish.rxm.eph", getRosBoolean(this, "publish.rxm.all"));
-  this->declare_parameter<bool>("publish.rxm.rtcm", getRosBoolean(this, "publish.rxm.all"));
-  this->declare_parameter<bool>("publish.rxm.raw", getRosBoolean(this, "publish.rxm.all"));
-  this->declare_parameter<bool>("publish.rxm.sfrb", getRosBoolean(this, "publish.rxm.all"));
+  this->declare_parameter("publish.rxm.all", getRosBoolean(this, "publish.all"));
+  this->declare_parameter("publish.rxm.almRaw", getRosBoolean(this, "publish.rxm.all"));
+  this->declare_parameter("publish.rxm.eph", getRosBoolean(this, "publish.rxm.all"));
+  this->declare_parameter("publish.rxm.rtcm", getRosBoolean(this, "publish.rxm.all"));
+  this->declare_parameter("publish.rxm.raw", getRosBoolean(this, "publish.rxm.all"));
+  this->declare_parameter("publish.rxm.sfrb", getRosBoolean(this, "publish.rxm.all"));
 
-  this->declare_parameter<bool>("publish.aid.all", getRosBoolean(this, "publish.all"));
-  this->declare_parameter<bool>("publish.aid.alm", getRosBoolean(this, "publish.aid.all"));
-  this->declare_parameter<bool>("publish.aid.eph", getRosBoolean(this, "publish.aid.all"));
-  this->declare_parameter<bool>("publish.aid.hui", getRosBoolean(this, "publish.aid.all"));
+  this->declare_parameter("publish.aid.all", getRosBoolean(this, "publish.all"));
+  this->declare_parameter("publish.aid.alm", getRosBoolean(this, "publish.aid.all"));
+  this->declare_parameter("publish.aid.eph", getRosBoolean(this, "publish.aid.all"));
+  this->declare_parameter("publish.aid.hui", getRosBoolean(this, "publish.aid.all"));
 
-  this->declare_parameter<bool>("publish.mon.all", getRosBoolean(this, "publish.all"));
-  this->declare_parameter<bool>("publish.mon.hw", getRosBoolean(this, "publish.mon.all"));
+  this->declare_parameter("publish.mon.all", getRosBoolean(this, "publish.all"));
+  this->declare_parameter("publish.mon.hw", getRosBoolean(this, "publish.mon.all"));
 
-  this->declare_parameter<bool>("publish.tim.tm2", false);
+  this->declare_parameter("publish.tim.tm2", false);
 
   // INF parameters
-  this->declare_parameter<bool>("inf.all", true);
-  this->declare_parameter<bool>("inf.debug", false);
-  this->declare_parameter<bool>("inf.error", getRosBoolean(this, "inf.all"));
-  this->declare_parameter<bool>("inf.notice", getRosBoolean(this, "inf.all"));
-  this->declare_parameter<bool>("inf.test", getRosBoolean(this, "inf.all"));
-  this->declare_parameter<bool>("inf.warning", getRosBoolean(this, "inf.all"));
+  this->declare_parameter("inf.all", true);
+  this->declare_parameter("inf.debug", false);
+  this->declare_parameter("inf.error", getRosBoolean(this, "inf.all"));
+  this->declare_parameter("inf.notice", getRosBoolean(this, "inf.all"));
+  this->declare_parameter("inf.test", getRosBoolean(this, "inf.all"));
+  this->declare_parameter("inf.warning", getRosBoolean(this, "inf.all"));
 
   // ESF parameters
-  this->declare_parameter<bool>("publish.esf.all", true);
-  this->declare_parameter<bool>("publish.esf.ins", getRosBoolean(this, "publish.esf.all"));
-  this->declare_parameter<bool>("publish.esf.meas", getRosBoolean(this, "publish.esf.all"));
-  this->declare_parameter<bool>("publish.esf.raw", getRosBoolean(this, "publish.esf.all"));
-  this->declare_parameter<bool>("publish.esf.status", getRosBoolean(this, "publish.esf.all"));
+  this->declare_parameter("publish.esf.all", true);
+  this->declare_parameter("publish.esf.ins", getRosBoolean(this, "publish.esf.all"));
+  this->declare_parameter("publish.esf.meas", getRosBoolean(this, "publish.esf.all"));
+  this->declare_parameter("publish.esf.raw", getRosBoolean(this, "publish.esf.all"));
+  this->declare_parameter("publish.esf.status", getRosBoolean(this, "publish.esf.all"));
 
   // HNR parameters
-  this->declare_parameter<bool>("publish.hnr.pvt", true);
+  this->declare_parameter("publish.hnr.pvt", true);
 
-  this->declare_parameter<int32_t>("tmode3", 0);
-  this->declare_parameter<std::vector<double>>("arp.position", std::vector<double>{});
-  this->declare_parameter<std::vector<int64_t>>("arp.position_hp", std::vector<int64_t>{});
-  this->declare_parameter<double>("arp.acc", 0.0);
-  this->declare_parameter<bool>("arp.lla_flag", false);
+  this->declare_parameter("tmode3");
+  this->declare_parameter("arp.position");
+  this->declare_parameter("arp.position_hp");
+  this->declare_parameter("arp.acc", 0.0);
+  this->declare_parameter("arp.lla_flag", false);
 
-  this->declare_parameter<double>("diagnostic_period", kDiagnosticPeriod);
+  this->declare_parameter("diagnostic_period", kDiagnosticPeriod);
 
   // Create publishers based on parameters
   if (getRosBoolean(this, "publish.nav.status")) {
