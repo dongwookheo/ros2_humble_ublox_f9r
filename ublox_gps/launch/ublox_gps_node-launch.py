@@ -36,9 +36,7 @@ import os
 
 import ament_index_python.packages
 import launch
-from launch.actions import DeclareLaunchArgument
 import launch_ros.actions
-from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
@@ -46,24 +44,14 @@ def generate_launch_description():
         ament_index_python.packages.get_package_share_directory('ublox_gps'),
         'config')
     params = os.path.join(config_directory, 'zed_f9r.yaml')
-
-    # Declare the launch argument for the serial port
-    device_argument = DeclareLaunchArgument(
-        'device',
-        default_value='/dev/ttyGPS',
-        description='Serial port for the ublox GPS device'
-    )
-
     ublox_gps_node = launch_ros.actions.Node(package='ublox_gps',
                                              executable='ublox_gps_node',
                                              output='both',
                                              remappings=[("fix", "ublox/fix")],
-                                             parameters=[params, {
-                                                    'device': LaunchConfiguration('device'),
-                                            }])
+                                             parameters=[params])
 
-    return launch.LaunchDescription([device_argument,
-                                     ublox_gps_node,
+    return launch.LaunchDescription([ublox_gps_node,
+
                                      launch.actions.RegisterEventHandler(
                                          event_handler=launch.event_handlers.OnProcessExit(
                                              target_action=ublox_gps_node,
